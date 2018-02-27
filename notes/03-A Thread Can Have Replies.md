@@ -1,4 +1,4 @@
-1. Set up a test from thread
+1. Set up a test for thread
 > Given we have a thread   
 > And that thread includes replies   
 > When we visit a thread page   
