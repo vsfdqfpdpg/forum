@@ -38,7 +38,16 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="/threads/create">Create</a></li>
-                    <li><a href="/threads">All Threads</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown">Browse<span
+                                    class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/threads">All Threads</a></li>
+                            @if(auth()->check())
+                                <li><a href="/threads?by={{ auth()->user()->name }}">My Threads</a></li>
+                            @endif
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown">Channel <span
                                     class="caret"></span></a>
