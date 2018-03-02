@@ -51,6 +51,30 @@ class CreateThreadsTest extends TestCase
         $this->publishThread(['channel_id' => 999 ])
             ->assertSessionHasErrors('channel_id');
     }
+    
+    /** @test */
+    public function guest_cannot_delete_threads (){
+        $this->withExceptionHandling();
+        $thread = create('App\Thread');
+        $this->delete($thread->path())
+            ->assertRedirect('/login');
+    }
+    
+    
+
+    /** @test */
+    public function a_thread_can_be_deleted (){
+        $this->signIn();
+        $thread = create('App\Thread');
+        $reply  = create('App\Reply',['thread_id'=> $thread->id]);
+
+        $this->json('DELETE',$thread->path())
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('threads',['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies',['id' => $reply->id]);
+    }
+
 
     public function publishThread($overrides = []){
         $this->withExceptionHandling()->signIn();
