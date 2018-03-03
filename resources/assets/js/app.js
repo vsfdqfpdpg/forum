@@ -11,8 +11,8 @@ window.Vue = require('vue');
 
 window.events = new Vue();
 
-window.flush = function (message) {
-    window.events.$emit('flush',message);
+window.flash = function (message) {
+    window.events.$emit('flash',message);
 }
 
 /**
