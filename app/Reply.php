@@ -9,6 +9,7 @@ class Reply extends Model
     use Favoritable,RecordsActivity;
     protected $fillable = ['body','user_id'];
     protected $with = ['owner','favorites'];
+    protected $appends = ['favoritesCount','isFavorited'];
 
     public function owner(){
         // if function name is not the same as table foreignKey plus id, you need provide foreign key as second parameter.
