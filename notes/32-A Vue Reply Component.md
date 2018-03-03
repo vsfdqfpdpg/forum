@@ -1,3 +1,5 @@
+1. Inline vue template
+```html
 <reply :attributes="{{ $reply }}" inline-template v-cloak>
     <div id="reply-{{ $reply->id }}" class="panel panel-default">
         <div class="panel-heading">
@@ -38,3 +40,27 @@
         @endcan
     </div>
 </reply>
+```
+
+```vue
+:attributes="{{ $reply }}"  // Add bind before attribute name, the object value will be interpreted as json
+v-cloak // [v-cloak]{display: none;} Set css style display:none before vue render, then when vue is done, v-cloak will be removed by vue.
+v-model="body"
+v-text="body"
+@click="update"
+v-if="editing"
+v-else
+```
+
+2. Model update
+```php
+$reply->update(request(['body']));
+$reply->update(['body' => request('body')]);
+```
+
+3. Axios patch request.
+```javascript
+axios.patch('/replies/'+this.attributes.id,{
+    body : this.body
+});
+```
