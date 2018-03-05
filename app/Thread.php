@@ -88,4 +88,14 @@ class Thread extends Model
     public function getIsSubscribedToAttribute(){
         return $this->subscriptions()->where('user_id',auth()->id())->exists();
     }
+
+    public function hasUpdatesFor($user){
+        // Look in the cache for the proper key.
+        // Compare that carbon instance with the $thread->updated_at
+
+
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
+    }
 }
