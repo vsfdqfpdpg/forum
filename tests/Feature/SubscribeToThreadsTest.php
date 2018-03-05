@@ -16,7 +16,7 @@ class SubscribeToThreadsTest extends TestCase
         $this->signIn();
         $thread = create('App\Thread');
         $this->post($thread->path().'/subscriptions');
-        $this->assertCount(1, $thread->subscriptions);
+        $this->assertCount(1, $thread->fresh()->subscriptions);
     }
     
     /** @test */

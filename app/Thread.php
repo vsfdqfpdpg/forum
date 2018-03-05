@@ -44,7 +44,13 @@ class Thread extends Model
     }
 
     public function addReply($reply){
-        return $this->replies()->create($reply);
+        $newReply = $this->replies()->create($reply);
+
+        $this->subscriptions->filter(function ($subscription) use($newReply){
+            return $subscription->user_id != $newReply->user_id;
+        })->each->notify($newReply);
+
+        return $newReply;
     }
 
     public function scopeFilter($query,$filters){
@@ -59,6 +65,8 @@ class Thread extends Model
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
         ]);
+
+        return $this;
     }
 
     public function unsubscribe($userId = null){

@@ -31,5 +31,10 @@ Route::delete('/threads/{channel}/{thread}/subscriptions','ThreadSubscriptionCon
 
 Route::post('/replies/{reply}/favorites','FavoriteController@store');
 Route::delete('/replies/{reply}/favorites','FavoriteController@destroy');
+
+
 Route::get('/profiles/{user}','ProfileController@show')->name('profile');
+Route::get('/profiles/{user}/notifications','UserNotificationController@index');
+Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationController@destroy');
+
 Route::get('/home', 'HomeController@index')->name('home');
