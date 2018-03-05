@@ -1,0 +1,1 @@
+1. Test from lower level,and then high level. Implementing the functionality with database or cache, and then the UI.
