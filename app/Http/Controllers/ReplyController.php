@@ -21,24 +21,7 @@ class ReplyController extends Controller
     }
 
     public function store($channelId,Thread $thread, CreatePostForm $form){
-        // return $form->persist($thread);
-
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
-
-        preg_match_all('/@([^\s\.]+)/',$reply->body,$matches);
-
-        $names = $matches[1];
-        foreach ($names as $name){
-            $user = User::whereName($name)->first();
-            if ($user){
-                $user->notify(new YouWereMentioned($reply));
-            }
-        }
-
-        return $reply->load('owner');
+        return $form->persist($thread);
     }
 
     public function update(Reply $reply){

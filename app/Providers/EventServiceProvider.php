@@ -14,7 +14,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\ThreadHasNewReply' => [
-            'App\Listeners\NotifyThreadSubscribers',
+
+        ],
+        'App\Events\ThreadReceivedNewReply' => [
+            'App\Listeners\NotifyMentionedUsers',
+            'App\Listeners\NotifyThreadSubscribers'
         ],
     ];
 
