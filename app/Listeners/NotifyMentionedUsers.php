@@ -37,12 +37,7 @@ class NotifyMentionedUsers
             }
         }
         */
-
-        collect($event->reply->mentionedUsers())
-            ->map(function($name){
-                return User::whereName($name)->first();
-            })
-            ->filter()
+        User::whereIn('name',$event->reply->mentionedUsers())->get()
             ->each(function($user) use($event){
                 $user->notify(new YouWereMentioned($event->reply));
             });
