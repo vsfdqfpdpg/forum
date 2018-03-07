@@ -40,4 +40,4 @@ Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationC
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/api/users','Api\UsersController@index');
-Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store');
+Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store')->name('avatar');
