@@ -38,3 +38,5 @@ Route::get('/profiles/{user}/notifications','UserNotificationController@index');
 Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationController@destroy');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/api/users','Api\UsersController@index');
