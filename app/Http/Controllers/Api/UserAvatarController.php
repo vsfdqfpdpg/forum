@@ -22,7 +22,7 @@ class UserAvatarController extends Controller
             'avatar_path' => request()->file('avatar')->store('avatars','public')
         ]);
 
-        return back();
+        return response([],204);
 
     }
 }
