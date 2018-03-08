@@ -39,12 +39,17 @@
         props: ['data'],
         components: {Favorite},
         data() {
-            return {editing: false, body: this.data.body, id: this.data.id, isBest : false}
+            return {editing: false, body: this.data.body, id: this.data.id, isBest : this.data.isBest}
         },
         computed: {
             ago(){
                 return moment(this.data.created_at).fromNow() + '...';
             }
+        },
+        created(){
+            window.events.$on('best-reply-selected',id=>{
+                this.isBest = ( id == this.id);
+            });
         },
         methods: {
             update() {
@@ -62,7 +67,8 @@
                 this.$emit('deleted', this.data.id);
             },
             markBestReply(){
-                this.isBest = true;
+                axios.post('/replies/'+this.data.id+'/best');
+                window.event.$emit('best-reply-selected',this.data.id);
             }
         }
     }
