@@ -20,7 +20,7 @@ class CreateThreadsTest extends TestCase
             ->assertRedirect('/login');
     }
 
-    
+
     /** @test */
     public function authenticated_user_must_first_confirm_their_email_address_before_creating_threads (){
         $this->publishThread()
