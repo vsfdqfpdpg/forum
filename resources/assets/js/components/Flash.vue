@@ -6,7 +6,7 @@
     export default {
         props : ['message'],
         data(){
-            return { body : '', show : false, level : 'success' }
+            return { body : this.message, show : false, level : 'success' }
         },
         created() {
             if(this.message){
@@ -16,8 +16,10 @@
         },
         methods :{
             flash(data){
-                this.body = data.message;
-                this.level = data.level;
+                if (data){
+                    this.body = data.message;
+                    this.level = data.level;
+                }
                 this.show = true;
                 this.hide();
             },
