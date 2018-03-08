@@ -14,16 +14,22 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class RegistrationTest extends TestCase
 {
    use DatabaseMigrations;
-   
+
    /** @test */
    public function a_confirmation_email_is_set_upon_registration (){
        Mail::fake();
-       event(new Registered(create('App\User')));
+       $this->post(route('register'),[
+           'name' => 'John',
+           'email' => 'john@example.com',
+           'password' => 'foobar',
+           'password_confirmation' => 'foobar'
+       ]);
        Mail::assertSent(PleaseConfirmYourEmail::class);
    }
-   
+
    /** @test */
    public function user_can_fully_confirm_their_email_address (){
+       Mail::fake();
        $this->post('/register',[
            'name' => 'John',
            'email' => 'john@example.com',
@@ -36,12 +42,20 @@ class RegistrationTest extends TestCase
 
        $this->assertNotNull($user->confirmation_token);
 
-       $response = $this->get('/register/confirm?token='.$user->confirmation_token);
+       $this->get(route('register.confirm',['token'=>$user->confirmation_token]))
+           ->assertRedirect(route('threads'));
 
        $this->assertTrue($user->fresh()->confirmed);
-       $response->assertRedirect('/threads');
-
    }
-   
-   
+
+   /** @test */
+   public function confirming_an_invalid_token (){
+       $this->get(route('register.confirm', ['token'=>'invalid']))
+           ->assertRedirect(route('threads'))
+           ->assertSessionHas('flash','Unknown token');
+   }
+
+
+
+
 }

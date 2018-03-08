@@ -22,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyThreadSubscribers'
         ],
         Registered::class => [
-            'App\Listeners\SendEmailConfirmationRequest'
+            /* 'App\Listeners\SendEmailConfirmationRequest' */
         ]
     ];
 

@@ -15,16 +15,20 @@ class CreateThreadsTest extends TestCase
     public function guest_can_not_create_thread (){
         $this->withExceptionHandling();
         $this->get('/threads/create')
-            ->assertRedirect('/login');
-        $this->post('/threads')
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
+        $this->post(route('threads'))
+            ->assertRedirect(route('login'));
     }
 
 
     /** @test */
-    public function authenticated_user_must_first_confirm_their_email_address_before_creating_threads (){
-        $this->publishThread()
-            ->assertRedirect('/threads')
+    public function new_users_must_first_confirm_their_email_address_before_creating_threads (){
+        $user = factory('App\User')->states('unconfirmed')->create();
+        $this->signIn($user);
+
+        $thread = make('App\Thread');
+        $this->post(route('threads'),$thread->toArray())
+            ->assertRedirect(route('threads'))
             ->assertSessionHas('flash','You must first confirm your email address.');
     }
     
@@ -33,7 +37,7 @@ class CreateThreadsTest extends TestCase
     public function an_authenticated_user_can_create_new_forum_threads (){
         $this->signIn();
         $thread = make('App\Thread');
-        $response = $this->post('/threads',$thread->toArray());
+        $response = $this->post(route('threads'),$thread->toArray());
 
         $this->get($response->headers->get('Location'))
             ->assertSee($thread->title)
@@ -67,7 +71,7 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling();
         $thread = create('App\Thread');
         $this->delete($thread->path())
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
 
         $this->signIn();
         $this->delete($thread->path())
@@ -105,6 +109,6 @@ class CreateThreadsTest extends TestCase
     public function publishThread($overrides = []){
         $this->withExceptionHandling()->signIn();
         $thread = make('App\Thread',$overrides);
-        return $this->post('/threads',$thread->toArray());
+        return $this->post(route('threads'),$thread->toArray());
     }
 }
