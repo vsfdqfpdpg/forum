@@ -5,12 +5,37 @@
         props : ['thread'],
         components : { Replies ,SubscribeButton},
         data(){
-            return { repliesCount : this.thread.replies_count, locked : this.thread.locked ,editing :false};
+            return {
+                repliesCount : this.thread.replies_count,
+                locked : this.thread.locked,
+                editing :false,
+                form :{},
+                title:this.thread.title,
+                body:this.thread.body
+            };
+        },
+        created(){
+          this.resetForm();
         },
         methods :{
             toggleLock(){
                 axios[this.locked ? 'delete' : 'post']('/locked-threads/'+this.thread.slug);
                 this.locked  = ! this.locked;
+            },
+            update(){
+                axios.patch('/threads/'+this.thread.channel.slug+'/'+this.thread.slug,this.form).then(()=>{
+                    this.editing = false;
+                    this.title = this.form.title;
+                    this.body = this.form.body;
+                    flash('Your thread has been updated.')
+                });
+            },
+            resetForm(){
+                this.form = {
+                    title : this.thread.title,
+                    body : this.thread.body
+                }
+                this.editing = false;
             }
         }
 

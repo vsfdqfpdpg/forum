@@ -59800,13 +59800,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['thread'],
     components: { Replies: __WEBPACK_IMPORTED_MODULE_0__components_Replies_vue___default.a, SubscribeButton: __WEBPACK_IMPORTED_MODULE_1__components_SubscribeButton_vue___default.a },
     data: function data() {
-        return { repliesCount: this.thread.replies_count, locked: this.thread.locked, editing: false };
+        return {
+            repliesCount: this.thread.replies_count,
+            locked: this.thread.locked,
+            editing: false,
+            form: {},
+            title: this.thread.title,
+            body: this.thread.body
+        };
+    },
+    created: function created() {
+        this.resetForm();
     },
 
     methods: {
         toggleLock: function toggleLock() {
             axios[this.locked ? 'delete' : 'post']('/locked-threads/' + this.thread.slug);
             this.locked = !this.locked;
+        },
+        update: function update() {
+            var _this = this;
+
+            axios.patch('/threads/' + this.thread.channel.slug + '/' + this.thread.slug, this.form).then(function () {
+                _this.editing = false;
+                _this.title = _this.form.title;
+                _this.body = _this.form.body;
+                flash('Your thread has been updated.');
+            });
+        },
+        resetForm: function resetForm() {
+            this.form = {
+                title: this.thread.title,
+                body: this.thread.body
+            };
+            this.editing = false;
         }
     }
 
