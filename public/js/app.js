@@ -59800,7 +59800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['thread'],
     components: { Replies: __WEBPACK_IMPORTED_MODULE_0__components_Replies_vue___default.a, SubscribeButton: __WEBPACK_IMPORTED_MODULE_1__components_SubscribeButton_vue___default.a },
     data: function data() {
-        return { repliesCount: this.thread.replies_count, locked: this.thread.locked };
+        return { repliesCount: this.thread.replies_count, locked: this.thread.locked, editing: false };
     },
 
     methods: {

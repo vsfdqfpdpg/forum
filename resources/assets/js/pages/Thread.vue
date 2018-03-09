@@ -5,7 +5,7 @@
         props : ['thread'],
         components : { Replies ,SubscribeButton},
         data(){
-            return { repliesCount : this.thread.replies_count, locked : this.thread.locked };
+            return { repliesCount : this.thread.replies_count, locked : this.thread.locked ,editing :false};
         },
         methods :{
             toggleLock(){
