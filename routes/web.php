@@ -20,6 +20,7 @@ Route::get('/threads','ThreadController@index')->name('threads');
 Route::get('/threads/create','ThreadController@create');
 Route::get('/threads/{channel}','ThreadController@index');
 Route::get('/threads/{channel}/{thread}','ThreadController@show');
+Route::patch('/threads/{channel}/{thread}','ThreadController@update');
 Route::patch('/threads/{channel}/{thread}','ThreadController@update')->name('thread.update');
 Route::post('/locked-threads/{thread}','LockedThreadController@store')->name('locked-threads.store')->middleware('admin');
 Route::delete('/locked-threads/{thread}','LockedThreadController@destroy')->name('locked-threads.destroy')->middleware('admin');
