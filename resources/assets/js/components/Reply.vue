@@ -3,11 +3,11 @@
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name"></a>
+                    <a :href="'/profiles/'+reply.owner.name" v-text="reply.owner.name"></a>
                     said <span v-text="ago"></span>
                 </h5>
                 <div v-if="signedIn">
-                    <favorite :reply="data"></favorite>
+                    <favorite :reply="reply"></favorite>
                 </div>
             </div>
         </div>
@@ -23,12 +23,12 @@
             </div>
             <div v-else v-html="body"></div>
         </div>
-        <div class="panel-footer level">
-            <div v-if="authorize('updateReply',data)">
+        <div class="panel-footer level" v-if="authorize('owns',reply) || authorize('own',reply.thread)">
+            <div v-if="authorize('owns',reply)">
                 <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
                 <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
             </div>
-            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">Best Reply?</button>
+            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-if="authorize('owns',reply.thread)">Best Reply?</button>
         </div>
     </div>
 </template>
@@ -36,14 +36,14 @@
     import Favorite from './Favorite';
     import moment from 'moment';
     export default {
-        props: ['data'],
+        props: ['reply'],
         components: {Favorite},
         data() {
-            return {editing: false, body: this.data.body, id: this.data.id, isBest : this.data.isBest}
+            return {editing: false, body: this.reply.body, id: this.reply.id, isBest : this.reply.isBest}
         },
         computed: {
             ago(){
-                return moment(this.data.created_at).fromNow() + '...';
+                return moment(this.reply.created_at).fromNow() + '...';
             }
         },
         created(){
@@ -53,7 +53,7 @@
         },
         methods: {
             update() {
-                axios.patch('/replies/' + this.data.id, {
+                axios.patch('/replies/' + this.id, {
                     body: this.body
                 }).catch( error =>{
                     flash(error.response.data,'danger');
@@ -63,12 +63,12 @@
                 flash('Updated!');
             },
             destroy() {
-                axios.delete('/replies/' + this.data.id);
-                this.$emit('deleted', this.data.id);
+                axios.delete('/replies/' + this.id);
+                this.$emit('deleted', this.id);
             },
             markBestReply(){
-                axios.post('/replies/'+this.data.id+'/best');
-                window.event.$emit('best-reply-selected',this.data.id);
+                axios.post('/replies/'+this.id+'/best');
+                window.events.$emit('best-reply-selected',this.id);
             }
         }
     }
