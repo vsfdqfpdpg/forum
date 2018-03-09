@@ -11,7 +11,7 @@ class Thread extends Model
     protected $guarded = [];
     protected $with = ['channel'];
     protected $appends = ['isSubscribedTo'];
-
+    protected $casts = ['locked' => 'boolean'];
     protected static function boot()
     {
         parent::boot();
@@ -60,10 +60,6 @@ class Thread extends Model
         // event(new ThreadHasNewReply($this,$newReply)); // Event way
 
         return $newReply;
-    }
-
-    public function lock(){
-        $this->update(['locked' => true]);
     }
 
     public function scopeFilter($query,$filters){
