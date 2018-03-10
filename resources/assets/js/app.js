@@ -6,9 +6,10 @@
  */
 
 require('./bootstrap');
+import InstantSearch from 'vue-instantsearch';
 
 window.Vue = require('vue');
-
+Vue.use(InstantSearch);
 let authorizations = require('./authorizations');
 
 window.Vue.prototype.authorize = function (...params) {
