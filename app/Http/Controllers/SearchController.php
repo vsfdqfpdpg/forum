@@ -9,14 +9,10 @@ use Illuminate\Http\Request;
 class SearchController extends Controller
 {
     public function show(Trending $trending){
-        $search = request('q');
-
-        $threads = Thread::search($search)->paginate(30);
         if (request()->expectsJson()){
-            return $threads;
+            return Thread::search(request('q'))->paginate(25);
         }
 
-        return view('threads.index',['threads' =>$threads,'trending' => $trending->get()]);
-
+        return view('threads.search',['trending' => $trending->get()]);
     }
 }
