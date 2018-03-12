@@ -1,7 +1,7 @@
 <template>
     <div v-if="signedIn">
             <div class="form-group">
-                <textarea name="body" id="body" cols="30" rows="5" class="form-control" v-model="body" required></textarea>
+                <wysiwyg name="body" v-model="body" placeholder="Have something to say?" :shouldClear="completed"></wysiwyg>
             </div>
             <button type="submit" class="btn btn-default" @click="addReply">Post</button>
     </div>
@@ -16,7 +16,7 @@
     import 'at.js';
     export default {
         data(){
-            return { body : ""};
+            return { body : "", completed : false};
         },
         mounted(){
           $('#body').atwho({
@@ -39,6 +39,8 @@
                     })
                     .then(({data})=> {
                        this.body = '';
+                       /*this.$refs.trix.$refs.trix.value = '';*/
+                       this.completed = true;
                        flash('Your reply has been posted.');
                        this.$emit('created',data);
                     });
